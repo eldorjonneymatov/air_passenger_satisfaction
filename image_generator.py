@@ -123,7 +123,7 @@ def draw(ob, ax):
     del (ob, ax)
 
 # Umumlashtiruvchi funksiya
-def train_image_generator(df):
+def image_generator(df):
     name0 = name1 = 1
     make_folder(f'{root}//images')
     make_folder(f'{root}//images//satisfaction')
@@ -154,35 +154,7 @@ def train_image_generator(df):
         im.close()
     del (df, img_buf, im, ob, fig, ax, name0, name1)
 
-# Sinov to`plami uchun tasvirlar yaratuvchi funksiya
-def test_image_generator(df):
-    name = 1
-    make_folder(f'{root}//test_images')
-    ob = file_name = img_buf = fig = ax = im = None
-    for idx in range(len(df)):
-        if idx % 200 == 0:
-            gc.collect()
-        print(f"{idx+1}/{len(df)}|{(idx+1)/len(df)*100:.0f}%", end='\r')
-        fig, ax = plt.subplots(figsize=(12, 12))
-        plt.xlim(0, 128)
-        plt.ylim(0, 128)
-        ob = df.iloc[idx]
-        draw(ob, ax)
-        plt.axis('off')
-        img_buf = io.BytesIO()
-        plt.savefig(img_buf, format='png')
-        im = Image.open(img_buf)
-        file_name = f"{root}//test_images//test_{name}.png"
-        im.save(file_name)
-        name += 1
-        plt.close(fig)
-        img_buf.close()
-        im.close()
-    del(df, ob, fig, ax, img_buf, im, name)
-
 if __name__ == '__main__':
-    root = "..."
+    root = "./"
     df = pd.read_csv(f"{root}\\prepared_to_img.csv")
-    test_df = pd.read_csv(f"{root}\\prepared_test_to_img.csv")
-    train_image_generator(df)
-    test_image_generator(test_df)
+    image_generator(df)
